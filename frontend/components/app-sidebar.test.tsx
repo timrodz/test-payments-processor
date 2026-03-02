@@ -4,7 +4,7 @@ import { AppSidebar } from "./app-sidebar";
 import { useAuth } from "@/providers/auth-context";
 import { usePathname } from "next/navigation";
 
-vi.mock("@/lib/auth-context", () => ({
+vi.mock("@/providers/auth-context", () => ({
   useAuth: vi.fn(),
 }));
 

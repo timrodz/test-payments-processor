@@ -85,6 +85,8 @@ Assumptions
 - System with small amount of users
 - Advanced user management not required - I went with a basic approach
 - No cloud infrastructure. Local-only solution with possibilities to expand outwards
+- There is no locking reservations for X amount of time (e.g. 5/10mins)
+- Users can register the same person for more than 1 trip
 
 This app has potential for growth and scalability in a production system. What I would do to get there:
 

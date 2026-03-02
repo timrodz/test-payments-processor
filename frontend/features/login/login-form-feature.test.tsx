@@ -10,7 +10,7 @@ import { LoginFormFeature } from "@/features/login/login-form-feature";
 import { useAuth } from "@/providers/auth-context";
 import { useMutation } from "@tanstack/react-query";
 
-vi.mock("@/lib/auth-context", () => ({
+vi.mock("@/providers/auth-context", () => ({
   useAuth: vi.fn(),
 }));
 
@@ -19,7 +19,7 @@ vi.mock("@tanstack/react-query", () => ({
 }));
 
 vi.mock("@/lib/client/@tanstack/react-query.gen", () => ({
-  loginAccessTokenApiV1LoginAccessTokenPostMutation: vi.fn(() => ({
+  loginAccessTokenApiV1UsersLoginAccessTokenPostMutation: vi.fn(() => ({
     mutationKey: ["login"],
   })),
 }));

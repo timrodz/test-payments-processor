@@ -4,7 +4,7 @@ import NewTripPage from "./page";
 import { useAuth } from "@/providers/auth-context";
 import { redirect } from "next/navigation";
 
-vi.mock("@/lib/auth-context", () => ({
+vi.mock("@/providers/auth-context", () => ({
   useAuth: vi.fn(),
 }));
 

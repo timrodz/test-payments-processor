@@ -3,7 +3,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import HomePage from "./page";
 import { useAuth } from "@/providers/auth-context";
 
-vi.mock("@/lib/auth-context", () => ({
+vi.mock("@/providers/auth-context", () => ({
   useAuth: vi.fn(),
 }));
 

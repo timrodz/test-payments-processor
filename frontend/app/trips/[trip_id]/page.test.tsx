@@ -5,7 +5,7 @@ import { useAuth } from "@/providers/auth-context";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
-vi.mock("@/lib/auth-context", () => ({
+vi.mock("@/providers/auth-context", () => ({
   useAuth: vi.fn(),
 }));
 

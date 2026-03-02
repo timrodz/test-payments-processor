@@ -4,7 +4,7 @@ import { ParentHomeFeature } from "./parent-home-feature";
 import { useAuth } from "@/providers/auth-context";
 import { useQuery } from "@tanstack/react-query";
 
-vi.mock("@/lib/auth-context", () => ({
+vi.mock("@/providers/auth-context", () => ({
   useAuth: vi.fn(),
 }));
 

@@ -13,7 +13,7 @@ describe("LoginPage", () => {
 
   it("renders the login page with the login form", () => {
     render(<LoginPage />);
-    expect(screen.getByText(/Parent Login/i)).toBeDefined();
+    expect(screen.getByText(/Welcome/i)).toBeDefined();
     expect(screen.getByTestId("login-form")).toBeDefined();
   });
 });
