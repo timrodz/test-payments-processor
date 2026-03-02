@@ -76,8 +76,6 @@ Payments
 
 ### High level design
 
-![High level design](docs/high-level-design.jpg)
-
 A relational database met the needs of the system, so I used Postgres as it's a system I'm most familiar with, and it's an industry standard as well.
 
 Assumptions
@@ -87,6 +85,11 @@ Assumptions
 - No cloud infrastructure. Local-only solution with possibilities to expand outwards
 - There is no locking reservations for X amount of time (e.g. 5/10mins)
 - Users can register the same person for more than 1 trip
+- There's no search/discovery functionality to find trips or schools
+
+![High level design](docs/design-high-level.jpg)
+
+## Deep Dive
 
 This app has potential for growth and scalability in a production system. What I would do to get there:
 
@@ -95,6 +98,8 @@ This app has potential for growth and scalability in a production system. What I
 - Add a DNS + Load balancer for the server entry
 - Create a server cluster so it scales for surges on popular events
 - Admin dashboard for CRUD operations
+
+![High Deep Dive](docs/design-deep-dive.jpg)
 
 ### How AI was used
 
@@ -276,3 +281,36 @@ Note: This endpoint is only meant to be used for development purposes, and is on
 
 - Visa: `41111111111111111`
 - MasterCard: `5431111111111111`
+
+## Screenshots
+
+### Home
+
+#### Admin
+
+![parent-trip-registration-form](docs/frontend/admin-home.jpg)
+
+#### Parent
+
+![parent-trip-registration-reminder](docs/frontend/parent-home.jpg)
+
+### Schools (Admin-only)
+
+![parent-trip-registration-payment-form](docs/frontend/admin-schools.jpg)
+
+### Trips
+
+#### Admin
+
+![parent-trip-registration-payment-confirmed](docs/frontend/admin-trips.jpg)
+
+#### Parent
+
+![parent-trip-view](docs/frontend/parent-trip-view.jpg)
+
+### Registrations (Parent only)
+
+![admin-trips](docs/frontend/parent-trip-registration-form.jpg)
+![admin-schools](docs/frontend/parent-trip-registration-reminder.jpg)
+![admin-home](docs/frontend/parent-trip-registration-payment-form.jpg)
+![parent-home](docs/frontend/parent-trip-registration-payment-confirmed.jpg)
