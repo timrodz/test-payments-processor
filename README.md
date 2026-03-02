@@ -42,7 +42,7 @@ Users
 - PATCH /users/me
 - PATCH /users/me/password
 - DELETE /users/me
-- POST /login/access-token
+- POST /users/login/access-token
 
 Schools
 
@@ -103,7 +103,26 @@ This app has potential for growth and scalability in a production system. What I
 - Experimentation with workflow between FastAPI <-> Next.js
 - Creating extra endpoints outside the intended scope. If it was just me, given time contraints I would've kept the solution a lot simpler.
 
-## Setup
+## Application stack
+
+### Backend
+
+- Language: Python (3.12)
+- Web Framework: FastAPI
+- Database: PostgreSQL
+
+### Frontend
+
+- Language: TypeScript
+- Framework: Next.js
+- UI library: React
+- Component library: Shadcn
+- Styling: Tailwind
+- Icons: Lucide
+
+For effective cross-functioning, the backend API generates an OpenAPI schema that gets consumed by the frontend, reducing development friction and providing interfaces to consume beyond basic HTTP requests using `fetch` or `axios`.
+
+## Development
 
 You can setup this repository using Docker (easy route) or Node + Python individually for the frontend + backend. It's still recommended to use Docker for setting up your Postgres database.
 
@@ -117,17 +136,18 @@ You can setup this repository using Docker (easy route) or Node + Python individ
 - Python `3.12`
 - Postgres `18.x`
 
-### Endpoints + ports
+### App services
 
 Before diving into the setup, these are the ports from where you can access the app:
 
 - `http://localhost:3000` (frontend)
 - `http://localhost:8000` (backend)
 - `http://localhost:8000/docs` (backend swagger docs/OpenAPI spec)
+- `http://localhost:5432` (database)
 
-### Pre-setup
+### Preparation
 
-There are example `.env` files inside the root, backend, and frontend directories. Please create copies of them and name them `.env`.
+There are example `.env` files inside the root, backend, and frontend directories. Please create copies of them and name them `.env`. This applies for the Docker and local setups.
 
 In the backend `.env`, you will need to generate a new value for `SECRET_KEY`. This can be done via:
 
@@ -139,7 +159,7 @@ The above script will output a random string. You can set `SECRET_KEY` to the va
 
 ### Docker setup
 
-Recommended: when you just want to run the app and verify it works in a pre-production environment.
+**Recommended:** when you just want to run the app and verify it works in a pre-production environment.
 
 ```bash
 docker compose build
@@ -157,7 +177,7 @@ If you get this output, that means you succeeded:
 
 ### Non-docker setup
 
-Recommended: when you want to develop the app, debug edge cases and fix issues.
+**Recommended:** when you want to develop the app, debug edge cases and fix issues.
 
 #### Backend
 
@@ -185,6 +205,16 @@ nvm use
 
 bun install # Installs frontend dependencies
 bun dev # Starts the development server
+```
+
+### Workflows
+
+#### Updating API routes or schemas
+
+The frontend app operates with an automatically generated OpenAPI spec, so it's imperative you update types when working with the backend.
+
+```bash
+./scripts/generate-openapi.sh
 ```
 
 ## Testing
