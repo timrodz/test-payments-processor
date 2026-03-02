@@ -119,6 +119,8 @@ This app has potential for growth and scalability in a production system. What I
 - Component library: Shadcn
 - Styling: Tailwind
 - Icons: Lucide
+- Client queries: TanStack ReactQuery
+- Form validation: Zod + React Hook Form
 
 For effective cross-functioning, the backend API generates an OpenAPI schema that gets consumed by the frontend, reducing development friction and providing interfaces to consume beyond basic HTTP requests using `fetch` or `axios`.
 
