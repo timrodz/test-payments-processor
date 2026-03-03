@@ -53,5 +53,11 @@ services:
       - POSTGRES_USER=${POSTGRES_USER?Variable not set}
       - POSTGRES_DB=${POSTGRES_DB?Variable not set}
 
+  dbgate:
+    image: dbgate/dbgate
+    restart: always
+    ports:
+      - "8001:3000"
+
 volumes:
   app-db-data:
