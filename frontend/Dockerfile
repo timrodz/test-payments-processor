@@ -31,6 +31,7 @@ RUN bun install
 ARG NEXT_PUBLIC_API_URL=http://localhost:8000
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
+RUN mkdir -p /app/frontend/public
 RUN bunx next build
 
 # ──────────────────────────────────────────────
