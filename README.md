@@ -112,8 +112,11 @@ This app has potential for growth and scalability in a production system. What I
 - Type generation
 - Experimentation with workflow between FastAPI <-> Next.js
 - Creating extra endpoints outside the intended scope. If it was just me, given time contraints I would've kept the solution a lot simpler.
+- Online app deployment + docker (file + compose) debugging
 
 ## Application stack
+
+This application references the [Full Stack FastAPI Template - Technology Stack and Features](https://fastapi.tiangolo.com/project-generation/#full-stack-fastapi-template-technology-stack-and-features) from FastAPI. It leverages folder structure, scripts, and recommended libraries on the backend. For the frontend I went with a similar approach using Next.js
 
 ### Backend
 
