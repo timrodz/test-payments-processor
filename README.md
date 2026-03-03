@@ -86,10 +86,11 @@ Assumptions
 - There is no locking reservations for X amount of time (e.g. 5/10mins)
 - Users can register the same person for more than 1 trip
 - There's no search/discovery functionality to find trips or schools
+- No pagination
 
 ![High level design](docs/design-high-level.jpg)
 
-## Deep Dive
+### Deep Dive
 
 This app has potential for growth and scalability in a production system. What I would do to get there:
 
@@ -98,6 +99,8 @@ This app has potential for growth and scalability in a production system. What I
 - Add a DNS + Load balancer for the server entry
 - Create a server cluster so it scales for surges on popular events
 - Admin dashboard for CRUD operations
+- Search for schools/trips
+- Paginated responses to handle scale
 
 ![High Deep Dive](docs/design-deep-dive.jpg)
 
