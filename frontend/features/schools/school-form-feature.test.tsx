@@ -1,4 +1,10 @@
-import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  cleanup,
+} from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { SchoolFormFeature } from "./school-form-feature";
 import { useRouter } from "next/navigation";
@@ -22,16 +28,22 @@ vi.mock("sonner", () => ({
 }));
 
 vi.mock("@/lib/client/@tanstack/react-query.gen", () => ({
-  createSchoolApiV1SchoolsPostMutation: vi.fn(() => ({ mutationKey: ["createSchool"] })),
-  updateSchoolApiV1SchoolsSchoolIdPatchMutation: vi.fn(() => ({ mutationKey: ["updateSchool"] })),
-  deleteSchoolApiV1SchoolsSchoolIdDeleteMutation: vi.fn(() => ({ mutationKey: ["deleteSchool"] })),
+  createSchoolApiV1SchoolsPostMutation: vi.fn(() => ({
+    mutationKey: ["createSchool"],
+  })),
+  updateSchoolApiV1SchoolsSchoolIdPatchMutation: vi.fn(() => ({
+    mutationKey: ["updateSchool"],
+  })),
+  deleteSchoolApiV1SchoolsSchoolIdDeleteMutation: vi.fn(() => ({
+    mutationKey: ["deleteSchool"],
+  })),
   readSchoolsApiV1SchoolsGetQueryKey: vi.fn(() => ["schools"]),
 }));
 
 describe("SchoolFormFeature", () => {
   const mockPush = vi.fn();
   const mockInvalidateQueries = vi.fn();
-  
+
   const mockCreateMutate = vi.fn();
   const mockUpdateMutate = vi.fn();
   const mockDeleteMutate = vi.fn();
@@ -39,8 +51,10 @@ describe("SchoolFormFeature", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (useRouter as any).mockReturnValue({ push: mockPush });
-    (useQueryClient as any).mockReturnValue({ invalidateQueries: mockInvalidateQueries });
-    
+    (useQueryClient as any).mockReturnValue({
+      invalidateQueries: mockInvalidateQueries,
+    });
+
     // Default implementation for mutations
     (useMutation as any).mockImplementation((options: any) => {
       if (options.mutationKey?.[0] === "createSchool") {
@@ -64,23 +78,31 @@ describe("SchoolFormFeature", () => {
     render(<SchoolFormFeature />);
     expect(screen.getByLabelText(/School Name/i)).toBeDefined();
     expect(screen.getByLabelText(/Address/i)).toBeDefined();
-    expect(screen.getByRole("button", { name: /Create School/i })).toBeDefined();
+    expect(
+      screen.getByRole("button", { name: /Create School/i }),
+    ).toBeDefined();
   });
 
   it("renders the update school form with initial values", () => {
-    const school = { id: "1", name: "Test School", address: "123 Test St" } as any;
+    const school = {
+      id: "1",
+      name: "Test School",
+      address: "123 Test St",
+    } as any;
     render(<SchoolFormFeature school={school} />);
-    
+
     expect(screen.getByDisplayValue("Test School")).toBeDefined();
     expect(screen.getByDisplayValue("123 Test St")).toBeDefined();
-    expect(screen.getByRole("button", { name: /Update School/i })).toBeDefined();
+    expect(
+      screen.getByRole("button", { name: /Update School/i }),
+    ).toBeDefined();
     // Delete button should also be visible in edit mode
     expect(screen.getByRole("button", { name: "" })).toBeDefined(); // Trash icon button
   });
 
   it("shows validation errors on empty submission", async () => {
     render(<SchoolFormFeature />);
-    
+
     fireEvent.click(screen.getByRole("button", { name: /Create School/i }));
 
     await waitFor(() => {
@@ -91,35 +113,48 @@ describe("SchoolFormFeature", () => {
 
   it("calls createMutation on valid submission for new school", async () => {
     render(<SchoolFormFeature />);
-    
-    fireEvent.change(screen.getByLabelText(/School Name/i), { target: { value: "New School" } });
-    fireEvent.change(screen.getByLabelText(/Address/i), { target: { value: "New Address" } });
-    
+
+    fireEvent.change(screen.getByLabelText(/School Name/i), {
+      target: { value: "New School" },
+    });
+    fireEvent.change(screen.getByLabelText(/Address/i), {
+      target: { value: "New Address" },
+    });
+
     fireEvent.click(screen.getByRole("button", { name: /Create School/i }));
 
     await waitFor(() => {
       expect(mockCreateMutate).toHaveBeenCalledWith(
         expect.objectContaining({
           body: { name: "New School", address: "New Address" },
-        })
+        }),
       );
     });
   });
 
   it("calls updateMutation on valid submission for existing school", async () => {
-    const school = { id: "1", name: "Old School", address: "Old Address" } as any;
+    const school = {
+      id: "1",
+      name: "Old School",
+      address: "Old Address",
+    } as any;
     render(<SchoolFormFeature school={school} />);
-    
-    fireEvent.change(screen.getByLabelText(/School Name/i), { target: { value: "Updated School" } });
-    
+
+    fireEvent.change(screen.getByLabelText(/School Name/i), {
+      target: { value: "Updated School" },
+    });
+
     fireEvent.click(screen.getByRole("button", { name: /Update School/i }));
 
     await waitFor(() => {
       expect(mockUpdateMutate).toHaveBeenCalledWith(
         expect.objectContaining({
           path: { school_id: "1" },
-          body: expect.objectContaining({ name: "Updated School", address: "Old Address" }),
-        })
+          body: expect.objectContaining({
+            name: "Updated School",
+            address: "Old Address",
+          }),
+        }),
       );
     });
   });
@@ -141,9 +176,13 @@ describe("SchoolFormFeature", () => {
     });
 
     render(<SchoolFormFeature />);
-    
-    fireEvent.change(screen.getByLabelText(/School Name/i), { target: { value: "New School" } });
-    fireEvent.change(screen.getByLabelText(/Address/i), { target: { value: "New Address" } });
+
+    fireEvent.change(screen.getByLabelText(/School Name/i), {
+      target: { value: "New School" },
+    });
+    fireEvent.change(screen.getByLabelText(/Address/i), {
+      target: { value: "New Address" },
+    });
     fireEvent.click(screen.getByRole("button", { name: /Create School/i }));
 
     await waitFor(() => {
@@ -169,9 +208,13 @@ describe("SchoolFormFeature", () => {
     });
 
     render(<SchoolFormFeature />);
-    
-    fireEvent.change(screen.getByLabelText(/School Name/i), { target: { value: "New School" } });
-    fireEvent.change(screen.getByLabelText(/Address/i), { target: { value: "New Address" } });
+
+    fireEvent.change(screen.getByLabelText(/School Name/i), {
+      target: { value: "New School" },
+    });
+    fireEvent.change(screen.getByLabelText(/Address/i), {
+      target: { value: "New Address" },
+    });
     fireEvent.click(screen.getByRole("button", { name: /Create School/i }));
 
     await waitFor(() => {
@@ -187,7 +230,7 @@ describe("SchoolFormFeature", () => {
   it("handles school deletion", async () => {
     const school = { id: "123", name: "To Delete", address: "..." } as any;
     let deleteSuccessCallback: any;
-    
+
     (useMutation as any).mockImplementation((options: any) => {
       if (options.mutationKey?.[0] === "deleteSchool") {
         deleteSuccessCallback = options.onSuccess;
@@ -197,18 +240,20 @@ describe("SchoolFormFeature", () => {
     });
 
     render(<SchoolFormFeature school={school} />);
-    
+
     // Click the trash icon button
     fireEvent.click(screen.getByRole("button", { name: "" }));
 
     // Wait for the AlertDialog to appear
     expect(screen.getByText(/Are you absolutely sure/i)).toBeDefined();
-    
+
     // Click the confirm delete button in the dialog
     fireEvent.click(screen.getByRole("button", { name: /Delete School/i }));
 
     await waitFor(() => {
-      expect(mockDeleteMutate).toHaveBeenCalledWith({ path: { school_id: "123" } });
+      expect(mockDeleteMutate).toHaveBeenCalledWith({
+        path: { school_id: "123" },
+      });
     });
 
     // Simulate successful deletion

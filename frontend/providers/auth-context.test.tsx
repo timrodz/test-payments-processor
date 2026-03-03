@@ -49,11 +49,11 @@ describe("AuthContext", () => {
 
   it("redirects to /login if no token and not at /login", async () => {
     (usePathname as any).mockReturnValue("/dashboard");
-    
+
     render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     await waitFor(() => {
@@ -68,16 +68,18 @@ describe("AuthContext", () => {
     render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     await waitFor(() => {
       expect(screen.getByTestId("user").textContent).toBe(mockUser.email);
     });
-    
-    expect(client.setConfig).toHaveBeenCalledWith(expect.objectContaining({
-      headers: { Authorization: "Bearer valid-token" }
-    }));
+
+    expect(client.setConfig).toHaveBeenCalledWith(
+      expect.objectContaining({
+        headers: { Authorization: "Bearer valid-token" },
+      }),
+    );
   });
 
   it("logs out and redirects to /login if token is invalid", async () => {
@@ -87,7 +89,7 @@ describe("AuthContext", () => {
     render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     await waitFor(() => {
@@ -99,11 +101,11 @@ describe("AuthContext", () => {
   it("handles login successfully", async () => {
     (usePathname as any).mockReturnValue("/login");
     (readUserMeApiV1UsersMeGet as any).mockResolvedValue({ data: mockUser });
-    
+
     render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     // We need to wait for initial loading to finish
@@ -130,7 +132,7 @@ describe("AuthContext", () => {
     render(
       <AuthProvider>
         <TestComponent />
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     await waitFor(() => {

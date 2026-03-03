@@ -1,4 +1,10 @@
-import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  cleanup,
+} from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { TripFormFeature } from "./trip-form-feature";
 import { useRouter } from "next/navigation";
@@ -23,9 +29,15 @@ vi.mock("sonner", () => ({
 }));
 
 vi.mock("@/lib/client/@tanstack/react-query.gen", () => ({
-  createTripApiV1TripsPostMutation: vi.fn(() => ({ mutationKey: ["createTrip"] })),
-  updateTripApiV1TripsTripIdPatchMutation: vi.fn(() => ({ mutationKey: ["updateTrip"] })),
-  deleteTripApiV1TripsTripIdDeleteMutation: vi.fn(() => ({ mutationKey: ["deleteTrip"] })),
+  createTripApiV1TripsPostMutation: vi.fn(() => ({
+    mutationKey: ["createTrip"],
+  })),
+  updateTripApiV1TripsTripIdPatchMutation: vi.fn(() => ({
+    mutationKey: ["updateTrip"],
+  })),
+  deleteTripApiV1TripsTripIdDeleteMutation: vi.fn(() => ({
+    mutationKey: ["deleteTrip"],
+  })),
   readSchoolsApiV1SchoolsGetOptions: vi.fn(() => ({ queryKey: ["schools"] })),
   readTripsApiV1TripsGetQueryKey: vi.fn(() => ["trips"]),
 }));
@@ -33,10 +45,10 @@ vi.mock("@/lib/client/@tanstack/react-query.gen", () => ({
 // Mocking Select component parts to make them easier to test
 vi.mock("@/components/ui/select", () => ({
   Select: ({ children, onValueChange, value, disabled }: any) => (
-    <select 
+    <select
       id="school_id"
-      data-testid="mock-select" 
-      value={value} 
+      data-testid="mock-select"
+      value={value}
       disabled={disabled}
       onChange={(e) => onValueChange(e.target.value)}
     >
@@ -44,9 +56,13 @@ vi.mock("@/components/ui/select", () => ({
     </select>
   ),
   SelectTrigger: ({ children }: any) => <>{children}</>,
-  SelectValue: ({ placeholder }: any) => <option value="">{placeholder}</option>,
+  SelectValue: ({ placeholder }: any) => (
+    <option value="">{placeholder}</option>
+  ),
   SelectContent: ({ children }: any) => <>{children}</>,
-  SelectItem: ({ children, value }: any) => <option value={value}>{children}</option>,
+  SelectItem: ({ children, value }: any) => (
+    <option value={value}>{children}</option>
+  ),
 }));
 
 describe("TripFormFeature", () => {
@@ -60,15 +76,17 @@ describe("TripFormFeature", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (useRouter as any).mockReturnValue({ push: mockPush });
-    (useQueryClient as any).mockReturnValue({ invalidateQueries: mockInvalidateQueries });
+    (useQueryClient as any).mockReturnValue({
+      invalidateQueries: mockInvalidateQueries,
+    });
     (useQuery as any).mockReturnValue({ data: { data: mockSchools } });
-    
+
     (useMutation as any).mockImplementation((options: any) => {
-      return { 
+      return {
         mutate: vi.fn((vars, mutationOptions) => {
           // Allow manual triggering of callbacks in tests if needed
-        }), 
-        isPending: false 
+        }),
+        isPending: false,
       };
     });
   });
@@ -92,10 +110,10 @@ describe("TripFormFeature", () => {
       title: "Science Museum",
       location: "London",
       date: "2024-05-20T10:00:00Z",
-      cost: 25.50,
+      cost: 25.5,
       max_students: 40,
       school_id: "school-1",
-      description: "A fun day out"
+      description: "A fun day out",
     } as any;
 
     render(<TripFormFeature trip={trip} />);
@@ -110,7 +128,7 @@ describe("TripFormFeature", () => {
 
   it("shows validation errors on empty submission", async () => {
     render(<TripFormFeature />);
-    
+
     fireEvent.click(screen.getByRole("button", { name: /Create Trip/i }));
 
     await waitFor(() => {
@@ -123,18 +141,33 @@ describe("TripFormFeature", () => {
 
   it("calls createMutation with formatted data on valid submission", async () => {
     const mockMutate = vi.fn();
-    (useMutation as any).mockReturnValue({ mutate: mockMutate, isPending: false });
+    (useMutation as any).mockReturnValue({
+      mutate: mockMutate,
+      isPending: false,
+    });
 
     render(<TripFormFeature />);
-    
+
     // Using the mocked select
-    fireEvent.change(screen.getByTestId("mock-select"), { target: { value: "school-2" } });
-    
-    fireEvent.change(screen.getByLabelText(/Trip Title/i), { target: { value: "Zoo Trip" } });
-    fireEvent.change(screen.getByLabelText(/Location/i), { target: { value: "City Zoo" } });
-    fireEvent.change(screen.getByLabelText(/Date & Time/i), { target: { value: "2024-06-15T09:00" } });
-    fireEvent.change(screen.getByLabelText(/Cost/i), { target: { value: "15.00" } });
-    fireEvent.change(screen.getByLabelText(/Maximum Students/i), { target: { value: "50" } });
+    fireEvent.change(screen.getByTestId("mock-select"), {
+      target: { value: "school-2" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/Trip Title/i), {
+      target: { value: "Zoo Trip" },
+    });
+    fireEvent.change(screen.getByLabelText(/Location/i), {
+      target: { value: "City Zoo" },
+    });
+    fireEvent.change(screen.getByLabelText(/Date & Time/i), {
+      target: { value: "2024-06-15T09:00" },
+    });
+    fireEvent.change(screen.getByLabelText(/Cost/i), {
+      target: { value: "15.00" },
+    });
+    fireEvent.change(screen.getByLabelText(/Maximum Students/i), {
+      target: { value: "50" },
+    });
 
     fireEvent.click(screen.getByRole("button", { name: /Create Trip/i }));
 
@@ -146,16 +179,20 @@ describe("TripFormFeature", () => {
             school_id: "school-2",
             cost: 15,
             max_students: "50", // register returns string for number inputs usually, though component casts it
-          })
-        })
+          }),
+        }),
       );
     });
   });
 
   it("handles trip deletion", async () => {
-    const trip = { id: "trip-1", title: "Delete Me", date: new Date().toISOString() } as any;
+    const trip = {
+      id: "trip-1",
+      title: "Delete Me",
+      date: new Date().toISOString(),
+    } as any;
     const mockDelete = vi.fn();
-    
+
     (useMutation as any).mockImplementation((options: any) => {
       if (options.mutationKey?.[0] === "deleteTrip") {
         return { mutate: mockDelete, isPending: false };
@@ -164,7 +201,7 @@ describe("TripFormFeature", () => {
     });
 
     render(<TripFormFeature trip={trip} />);
-    
+
     // Click trash button
     fireEvent.click(screen.getByRole("button", { name: "" }));
 

@@ -1,4 +1,10 @@
-import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  cleanup,
+} from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import PaymentPage from "./page";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -24,8 +30,12 @@ vi.mock("sonner", () => ({
 
 vi.mock("@/lib/client/@tanstack/react-query.gen", () => ({
   readTripByIdApiV1TripsTripIdGetOptions: vi.fn(() => ({ queryKey: ["trip"] })),
-  readRegistrationByIdApiV1RegistrationsRegistrationIdGetOptions: vi.fn(() => ({ queryKey: ["reg"] })),
-  submitPaymentApiV1PaymentsPostMutation: vi.fn(() => ({ mutationKey: ["pay"] })),
+  readRegistrationByIdApiV1RegistrationsRegistrationIdGetOptions: vi.fn(() => ({
+    queryKey: ["reg"],
+  })),
+  submitPaymentApiV1PaymentsPostMutation: vi.fn(() => ({
+    mutationKey: ["pay"],
+  })),
 }));
 
 describe("PaymentPage", () => {
@@ -36,9 +46,15 @@ describe("PaymentPage", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useParams as any).mockReturnValue({ trip_id: "trip-1", registration_id: "reg-1" });
+    (useParams as any).mockReturnValue({
+      trip_id: "trip-1",
+      registration_id: "reg-1",
+    });
     (useRouter as any).mockReturnValue({ push: mockPush });
-    (useMutation as any).mockReturnValue({ mutateAsync: mockMutateAsync, isPending: false });
+    (useMutation as any).mockReturnValue({
+      mutateAsync: mockMutateAsync,
+      isPending: false,
+    });
   });
 
   afterEach(() => {
@@ -53,13 +69,15 @@ describe("PaymentPage", () => {
 
   it("renders payment form", () => {
     (useQuery as any).mockImplementation((options: any) => {
-      if (options.queryKey[0] === "trip") return { isLoading: false, data: mockTrip };
-      if (options.queryKey[0] === "reg") return { isLoading: false, data: mockReg };
+      if (options.queryKey[0] === "trip")
+        return { isLoading: false, data: mockTrip };
+      if (options.queryKey[0] === "reg")
+        return { isLoading: false, data: mockReg };
       return { isLoading: false };
     });
-    
+
     render(<PaymentPage />);
-    
+
     expect(screen.getByText(/Johnny Doe's/i)).toBeDefined();
     expect(screen.getByText("$25.00", { selector: "span" })).toBeDefined();
     expect(screen.getByLabelText(/Card Number/i)).toBeDefined();
@@ -67,39 +85,61 @@ describe("PaymentPage", () => {
 
   it("validates expiry date format", async () => {
     (useQuery as any).mockImplementation((options: any) => {
-      if (options.queryKey[0] === "trip") return { isLoading: false, data: mockTrip };
-      if (options.queryKey[0] === "reg") return { isLoading: false, data: mockReg };
+      if (options.queryKey[0] === "trip")
+        return { isLoading: false, data: mockTrip };
+      if (options.queryKey[0] === "reg")
+        return { isLoading: false, data: mockReg };
       return { isLoading: false };
     });
-    
+
     render(<PaymentPage />);
-    
-    fireEvent.change(screen.getByLabelText(/Card Number/i), { target: { value: "4111111111111111" } });
-    fireEvent.change(screen.getByLabelText(/Expiry Date/i), { target: { value: "13/25" } }); // Invalid month
-    fireEvent.change(screen.getByLabelText(/CVV/i), { target: { value: "123" } });
-    
-    fireEvent.submit(screen.getByRole("button", { name: /Pay \$25\.00/i }).closest("form")!);
-    
-    expect(toast.error).toHaveBeenCalledWith("Invalid expiry date format. Use MM/YY.");
+
+    fireEvent.change(screen.getByLabelText(/Card Number/i), {
+      target: { value: "4111111111111111" },
+    });
+    fireEvent.change(screen.getByLabelText(/Expiry Date/i), {
+      target: { value: "13/25" },
+    }); // Invalid month
+    fireEvent.change(screen.getByLabelText(/CVV/i), {
+      target: { value: "123" },
+    });
+
+    fireEvent.submit(
+      screen.getByRole("button", { name: /Pay \$25\.00/i }).closest("form")!,
+    );
+
+    expect(toast.error).toHaveBeenCalledWith(
+      "Invalid expiry date format. Use MM/YY.",
+    );
   });
 
   it("submits payment successfully", async () => {
     (useQuery as any).mockImplementation((options: any) => {
-      if (options.queryKey[0] === "trip") return { isLoading: false, data: mockTrip };
-      if (options.queryKey[0] === "reg") return { isLoading: false, data: mockReg };
+      if (options.queryKey[0] === "trip")
+        return { isLoading: false, data: mockTrip };
+      if (options.queryKey[0] === "reg")
+        return { isLoading: false, data: mockReg };
       return { isLoading: false };
     });
-    
+
     mockMutateAsync.mockResolvedValue({ status: "success", id: "pay-1" });
-    
+
     render(<PaymentPage />);
-    
-    fireEvent.change(screen.getByLabelText(/Card Number/i), { target: { value: "4111111111111111" } });
-    fireEvent.change(screen.getByLabelText(/Expiry Date/i), { target: { value: "12/26" } });
-    fireEvent.change(screen.getByLabelText(/CVV/i), { target: { value: "123" } });
-    
-    fireEvent.submit(screen.getByRole("button", { name: /Pay \$25\.00/i }).closest("form")!);
-    
+
+    fireEvent.change(screen.getByLabelText(/Card Number/i), {
+      target: { value: "4111111111111111" },
+    });
+    fireEvent.change(screen.getByLabelText(/Expiry Date/i), {
+      target: { value: "12/26" },
+    });
+    fireEvent.change(screen.getByLabelText(/CVV/i), {
+      target: { value: "123" },
+    });
+
+    fireEvent.submit(
+      screen.getByRole("button", { name: /Pay \$25\.00/i }).closest("form")!,
+    );
+
     await waitFor(() => {
       expect(mockMutateAsync).toHaveBeenCalled();
       expect(toast.success).toHaveBeenCalledWith("Payment successful!");
