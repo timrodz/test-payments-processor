@@ -127,7 +127,6 @@ export default function TripsPage() {
   } = useQuery({
     ...readTripsApiV1TripsGetOptions(),
   });
-  console.log("tripss", tripsData);
 
   if (isLoading) {
     return (
