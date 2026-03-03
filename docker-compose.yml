@@ -33,7 +33,7 @@ services:
       dockerfile: backend/Dockerfile
 
   db:
-    image: postgres:18
+    image: postgres:14
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
