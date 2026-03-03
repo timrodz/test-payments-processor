@@ -26,10 +26,14 @@ def get_trip(*, session: Session, trip_id: uuid.UUID) -> Trip | None:
 
 
 def get_trips(
-    *, session: Session, school_id: uuid.UUID | None = None, skip: int = 0, limit: int = 100
+    *,
+    session: Session,
+    school_id: uuid.UUID | None = None,
+    skip: int = 0,
+    limit: int = 100,
 ) -> Sequence[tuple[Trip, int]]:
     registration_count_subquery = (
-        select(func.count(Registration.id))
+        select(func.count(Registration.id))  # type: ignore[arg-type]
         .where(
             Registration.trip_id == Trip.id,
             Registration.status != RegistrationStatus.CANCELLED,

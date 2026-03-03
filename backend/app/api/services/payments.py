@@ -35,9 +35,7 @@ def process_payment(*, session: Session, payment_in: PaymentProcess) -> Payment:
 
         # 2. Fetch trip with a row-level lock
         trip = session.exec(
-            select(Trip)
-            .where(Trip.id == registration.trip_id)
-            .with_for_update()
+            select(Trip).where(Trip.id == registration.trip_id).with_for_update()
         ).first()
 
         if not trip:
@@ -46,7 +44,7 @@ def process_payment(*, session: Session, payment_in: PaymentProcess) -> Payment:
         # 3. Check capacity
         # We only count confirmed registrations to determine if there's room for one more
         confirmed_count = session.exec(
-            select(func.count(Registration.id))
+            select(func.count(Registration.id))  # type: ignore[arg-type]
             .where(Registration.trip_id == trip.id)
             .where(Registration.status == RegistrationStatus.CONFIRMED)
         ).one()
